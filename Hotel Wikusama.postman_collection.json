@@ -1,0 +1,866 @@
+{
+	"info": {
+		"_postman_id": "d162de3d-2440-4fec-9e20-456486332812",
+		"name": "Hotel Wikusama",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29101803"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_user",
+									"value": "resepsionis",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/D:/Pictures/gapapa.jpeg"
+								},
+								{
+									"key": "email",
+									"value": "ian@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "guest@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "customer",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/user/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUser",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kamar",
+			"item": [
+				{
+					"name": "addKamar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci85NjA5MzY4NV9wMF9tYXN0ZXIxMjAwLTE3MjczMjI3MTE0NjMuanBnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjZUMDM6NTE6NTEuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjZUMDM6NTE6NTEuMDAwWiJ9.QxZuoT3f-cFShG92mM_vl5z9o9JPK_Qi8F1_CkrG-9c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nomor_kamar",
+									"value": "101",
+									"type": "text"
+								},
+								{
+									"key": "id_tipe_kamar",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/room",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllKamar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/room-type",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateKamar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nomor_kamar",
+									"value": "104",
+									"type": "text"
+								},
+								{
+									"key": "id_tipe_kamar",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/room",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteKamar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/room/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Filter Kamar",
+			"item": [
+				{
+					"name": "filter",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/filter/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"filter",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addFilter",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "max_harga",
+									"value": "800000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"filter"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pemesanan",
+			"item": [
+				{
+					"name": "addPemesanan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF9wZWxhbmdnYW4iOjQsIm5hbWEiOiJHdWVzdCIsImZvdG8iOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvdXNyL0dWa1R5RzNiZ0FFWkpUcS0xNzI3NjIxMzA3OTc4LmpwZWciLCJzbHVnIjoiZ3Vlc3QiLCJlbWFpbCI6Imd1ZXN0QG1haWwuY29tIiwicGFzc3dvcmQiOiI5MWVjMWY5MzI0NzUzMDQ4YzAwOTZkMDM2YTY5NGY4NiIsInJvbGUiOiJwZWxhbmdnYW4iLCJjcmVhdGVkQXQiOiIyMDI0LTA5LTI5VDE0OjQ4OjI3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA5LTI5VDE0OjQ4OjI3LjAwMFoifQ.oEqEZ9kY43pvFIe21a4I5DmGP5W067O1Xcx0WwsBy7M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tgl_check_in",
+									"value": "29-09-2024",
+									"type": "text"
+								},
+								{
+									"key": "tgl_check_out",
+									"value": "30-09-2024",
+									"type": "text"
+								},
+								{
+									"key": "nama_tamu",
+									"value": "Tamu 1",
+									"type": "text"
+								},
+								{
+									"key": "jumlah_kamar",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "id_tipe_kamar",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/booking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/booking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCustomerPemesanansId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/booking/customer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"booking",
+								"customer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePemesanan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci85NjA5MzY4NV9wMF9tYXN0ZXIxMjAwLTE3MjczMjI3MTE0NjMuanBnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjZUMDM6NTE6NTEuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjZUMDM6NTE6NTEuMDAwWiJ9.QxZuoT3f-cFShG92mM_vl5z9o9JPK_Qi8F1_CkrG-9c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status_pemesanan\": \"check_out\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/booking/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"booking",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDetailPemesanan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjo0LCJuYW1hX3VzZXIiOiJhZG1pbiIsImZvdG8iOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvdXNyLzIyMTIyMy1wLTEtMTcyNzY2MDQ5MzkyNi5qcGciLCJzbHVnIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiJ9.75wEj7LN8CxFeum-La_b4wAaHxwnHNQ7RXR8RTfVvjY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/booking/detail/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"booking",
+								"detail",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePemesanan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/booking/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"booking",
+								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pelanggan",
+			"item": [
+				{
+					"name": "getPelanggan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addPelanggan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjozLCJuYW1hX3VzZXIiOiJpYW4iLCJmb3RvIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3Vzci9nYXBhcGEtMTcyNzYwODg2MjcyNi5qcGVnIiwic2x1ZyI6ImlhbiIsImVtYWlsIjoiaWFuQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMjlUMTE6MjE6MDIuMDAwWiJ9.Ck8dvpJwFQXTf1YqqRTci8cF4qqnqbI7q2Gd67KrlFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama",
+									"value": "Those Who Came",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/D:/Pictures/1724489307458.jpg"
+								},
+								{
+									"key": "email",
+									"value": "thosewhocame@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "customer",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePelanggan",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "deletePelanggan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjo0LCJuYW1hX3VzZXIiOiJhZG1pbiIsImZvdG8iOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvdXNyLzIyMTIyMy1wLTEtMTcyNzY2MDQ5MzkyNi5qcGciLCJzbHVnIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiJ9.75wEj7LN8CxFeum-La_b4wAaHxwnHNQ7RXR8RTfVvjY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/customer/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"customer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginPelanggan",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "thosewhocame@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "customer",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/customer/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"customer",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tipe Kamar",
+			"item": [
+				{
+					"name": "getTipeKamar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjo0LCJuYW1hX3VzZXIiOiJhZG1pbiIsImZvdG8iOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvdXNyLzIyMTIyMy1wLTEtMTcyNzY2MDQ5MzkyNi5qcGciLCJzbHVnIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiJ9.75wEj7LN8CxFeum-La_b4wAaHxwnHNQ7RXR8RTfVvjY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/room-type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room-type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addTipeKamar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjo0LCJuYW1hX3VzZXIiOiJhZG1pbiIsImZvdG8iOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvdXNyLzIyMTIyMy1wLTEtMTcyNzY2MDQ5MzkyNi5qcGciLCJzbHVnIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDktMzBUMDE6NDE6MzMuMDAwWiJ9.75wEj7LN8CxFeum-La_b4wAaHxwnHNQ7RXR8RTfVvjY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/room-type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room-type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateKamar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjoyLCJuYW1hX3VzZXIiOiJhZG1pbiIsImZvdG8iOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvdXNyLzIyMTIyMy1wLTEtMTcyNzkyMTA0MTk0My5qcGciLCJzbHVnIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwicGFzc3dvcmQiOiIyMTIzMmYyOTdhNTdhNWE3NDM4OTRhMGU0YTgwMWZjMyIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMDNUMDI6MDQ6MDEuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMDNUMDI6MDQ6MDEuMDAwWiJ9.rWNNhdjmrqIXSWVY9yoyoQ_jZOqGSs1dl4vrBlsTFxA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_tipe_kamar",
+									"value": "Luxury",
+									"type": "text"
+								},
+								{
+									"key": "harga",
+									"value": "550000",
+									"type": "text"
+								},
+								{
+									"key": "deskripsi",
+									"value": "Those who work for the full stomach and ignore the hungry",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/ACER/Pictures/F9zHY0OXoAA_CGh.jpeg"
+								},
+								{
+									"key": "id_tipe_kamar",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/room-type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"room-type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTipeKamar",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "http://localhost:8000/api/v1/hotel/"
+		},
+		{
+			"key": "bearer",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJuYW1hX3VzZXIiOiJqb2huIGRvZSIsImlhdCI6MTcyNzMxOTI2MX0.lx7KtIrym1e9y6krtxO8Jd6kPwf6s1IAd6u_dL6EFB0"
+		}
+	]
+}

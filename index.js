@@ -35,53 +35,6 @@ app.use("/booking", pemesanan);
 app.use("/booking/detail", detail_pemesanan);
 app.use("/filter", filter_kamar);
 
-// Your checkAndUpdateStatus function
-async function checkAndUpdateStatus() {
-  let now = moment().format("DD-MM-YYYY");
-
-  try {
-    const updateIn = `UPDATE pemesanans SET status_pemesanan = "checkin" WHERE tgl_check_in = '${now}' RETURNING nomor_kamar`;
-    const resultsIn = await sequelize.query(updateIn, {
-      type: sequelize.QueryTypes.UPDATE,
-    });
-
-    if (resultsIn[1] > 0) {
-      resultsIn[0].forEach((kamar) => {
-        console.log(`Berhasil update status checkin. Nomor kamar: ${kamar.nomor_kamar}`);
-      });
-    } else {
-      console.log("Tidak ada kamar yang di-checkin.");
-    }
-  } catch (error) {
-    console.error(`Error updating check-in status: ${error.message}`);
-  }
-
-  try {
-    const updateOut = `UPDATE pemesanans SET status_pemesanan = "checkout" WHERE tgl_check_out = '${now}' RETURNING nomor_kamar`;
-    const resultsOut = await sequelize.query(updateOut, {
-      type: sequelize.QueryTypes.UPDATE,
-    });
-
-    if (resultsOut[1] > 0) {
-      resultsOut[0].forEach((kamar) => {
-        console.log(`Berhasil update status checkout. Nomor kamar: ${kamar.nomor_kamar}`);
-      });
-    } else {
-      console.log("Tidak ada kamar yang di-checkout.");
-    }
-  } catch (error) {
-    console.error(`Error updating check-out status: ${error.message}`);
-  }
-}
-
-// Schedule the status check function
-const now = moment().tz("Asia/Jakarta");
-const timeString = now.format("h:mm A");
-
-if (timeString === "12:00 PM") {
-  setInterval(checkAndUpdateStatus, 20000);
-}
-
 app.listen(PORT, () =>
   console.log(`Server started on http://localhost:${PORT} 🚀`)
 );
