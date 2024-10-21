@@ -89,18 +89,19 @@ app.get(
  * @apiGroup Booking
  * @apiDescription Insert booking data
  */
-app.post("/", mustLogin, async (req, res) => {
+app.post("/", 
+  mustLogin,
+   async (req, res) => {
   try {
-    let dt = Date.now();
-    let receiptNum = Math.floor(
-      Math.random() * (1000000000 - 99999999) + 99999999
-    );
+    // Generate receipt number and current timestamp
+    const dt = Date.now();
+    const receiptNum = Math.floor(Math.random() * (1000000000 - 99999999) + 99999999);
 
-    // Get the check-in and check-out dates from the request body
-    let tgl_check_in = new Date(req.body.tgl_check_in);
-    let tgl_check_out = new Date(req.body.tgl_check_out);
+    // Extract check-in and check-out dates from request body
+    const tgl_check_in = new Date(req.body.tgl_check_in);
+    const tgl_check_out = new Date(req.body.tgl_check_out);
 
-    // Calculate the booking status based on the dates
+    // Determine the booking status
     let status_pemesanan;
     if (Date.now() < tgl_check_in) {
       status_pemesanan = "baru"; // Booking is new
@@ -110,7 +111,7 @@ app.post("/", mustLogin, async (req, res) => {
       status_pemesanan = "check_out"; // Guest has checked out
     }
 
-    let data = {
+    const data = {
       nomor_pemesanan: `WH-${receiptNum}`,
       tgl_pemesanan: dt,
       tgl_check_in: req.body.tgl_check_in,
@@ -119,84 +120,59 @@ app.post("/", mustLogin, async (req, res) => {
       nama_tamu: req.body.nama_tamu,
       jumlah_kamar: req.body.jumlah_kamar,
       id_tipe_kamar: req.body.id_tipe_kamar,
-      status_pemesanan: status_pemesanan, // Set the status here
-      email_pemesanan: req.body.email_pemesanan,
+      status_pemesanan: status_pemesanan,
+      email_pemesanan: req.body.email_pemesanan.toLowerCase(), // Convert email to lowercase
     };
 
-    // Error handling for missing fields (without status_pemesanan)
+    // Validate required fields
     const requiredFields = [
-      "tgl_check_in",
-      "tgl_check_out",
-      "nama_tamu",
-      "jumlah_kamar",
-      "id_tipe_kamar",
-      "email_pemesanan",
+      "tgl_check_in", "tgl_check_out", "nama_tamu",
+      "jumlah_kamar", "id_tipe_kamar", "email_pemesanan"
     ];
-
     for (const field of requiredFields) {
       if (!req.body[field]) {
-        return res
-          .status(400)
-          .json({ message: `Missing ${field} in request body` });
+        return res.status(400).json({ message: `Missing ${field} in request body` });
       }
     }
 
     // Validate date format
-    if (
-      isNaN(new Date(data.tgl_check_in)) ||
-      isNaN(new Date(data.tgl_check_out))
-    ) {
+    if (isNaN(tgl_check_in) || isNaN(tgl_check_out)) {
       return res.status(400).json({ message: "Invalid date format" });
     }
 
-    // Validate if check-in date is before check-out date
-    if (new Date(data.tgl_check_in) >= new Date(data.tgl_check_out)) {
-      return res
-        .status(400)
-        .json({ message: "Check-out date must be after check-in date" });
+    // Check if check-out date is after check-in date
+    if (tgl_check_in >= tgl_check_out) {
+      return res.status(400).json({ message: "Check-out date must be after check-in date" });
     }
 
-    // Find user by email_pemesanan
+    // Find user by email_pemesanan (case-insensitive)
     const pelangganRecord = await pelanggan.findOne({
-      where: { email: data.email_pemesanan },
+      where: { email: { [Op.like]: data.email_pemesanan } }
     });
     if (!pelangganRecord) {
+      console.log("No pelanggan found with email:", data.email_pemesanan);
       return res.status(400).json({ message: "Invalid user" });
     }
 
-    // Retrieve room data
-    const dataKamar = await kamar.findAll({
-      where: { id_tipe_kamar: data.id_tipe_kamar },
-    });
-
+    // Retrieve room data based on room type
+    const dataKamar = await kamar.findAll({ where: { id_tipe_kamar: data.id_tipe_kamar } });
     if (!dataKamar || dataKamar.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "No rooms available for the given type" });
+      return res.status(400).json({ message: "No rooms available for the given type" });
     }
 
-    // Retrieve room type data
-    const dataTipeKamar = await tipe_kamar.findOne({
-      where: { id_tipe_kamar: data.id_tipe_kamar },
-    });
-
+    // Retrieve room type details
+    const dataTipeKamar = await tipe_kamar.findOne({ where: { id_tipe_kamar: data.id_tipe_kamar } });
     if (!dataTipeKamar) {
       return res.status(400).json({ message: "Room type not found" });
     }
 
     // Calculate total days of stay
-    const checkIn = new Date(data.tgl_check_in);
-    const checkOut = new Date(data.tgl_check_out);
-    const totalHari = Math.round((checkOut - checkIn) / (1000 * 3600 * 24));
-
+    const totalHari = Math.round((tgl_check_out - tgl_check_in) / (1000 * 3600 * 24));
     if (totalHari <= 0) {
       return res.status(400).json({ message: "Invalid stay duration" });
     }
 
-    // Check if the total price is correct
-    const totalHarga = dataTipeKamar.harga * data.jumlah_kamar * totalHari;
-
-    // Check room availability
+    // Check room availability and existing bookings
     const dataPemesanan = await tipe_kamar.findAll({
       attributes: ["id_tipe_kamar", "nama_tipe_kamar"],
       where: { id_tipe_kamar: data.id_tipe_kamar },
@@ -212,7 +188,7 @@ app.post("/", mustLogin, async (req, res) => {
               attributes: ["tgl_akses"],
               where: {
                 tgl_akses: {
-                  [Op.between]: [data.tgl_check_in, data.tgl_check_out],
+                  [Op.between]: [tgl_check_in, tgl_check_out],
                 },
               },
             },
@@ -221,24 +197,25 @@ app.post("/", mustLogin, async (req, res) => {
       ],
     });
 
-    const bookedRoomIds =
-      dataPemesanan[0]?.kamar.map((room) => room.id_kamar) || [];
-    const availableRooms = dataKamar.filter(
-      (room) => !bookedRoomIds.includes(room.id_kamar)
-    );
+    // Get list of booked room IDs and filter available rooms
+    const bookedRoomIds = dataPemesanan[0]?.kamar.map((room) => room.id_kamar) || [];
+    const availableRooms = dataKamar.filter((room) => !bookedRoomIds.includes(room.id_kamar));
 
     if (availableRooms.length < data.jumlah_kamar) {
       return res.status(400).json({ message: "Not enough rooms available" });
     }
 
-    // Create booking and booking details
-    const selectedRooms = availableRooms.slice(0, data.jumlah_kamar);
+    // Calculate total price
+    const totalHarga = dataTipeKamar.harga * data.jumlah_kamar * totalHari;
 
+    // Create new booking (pemesanan)
     const newPemesanan = await pemesanan.create(data);
 
+    // Create booking details for each day and room
+    const selectedRooms = availableRooms.slice(0, data.jumlah_kamar);
     for (let i = 0; i < totalHari; i++) {
       for (const room of selectedRooms) {
-        let tgl_akses = new Date(checkIn);
+        const tgl_akses = new Date(tgl_check_in);
         tgl_akses.setDate(tgl_akses.getDate() + i);
 
         const bookingDetail = {
@@ -261,6 +238,7 @@ app.post("/", mustLogin, async (req, res) => {
         id: newPemesanan.id_pemesanan, // Include the booking ID
       },
     });
+
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({

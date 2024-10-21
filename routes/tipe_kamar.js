@@ -1,4 +1,4 @@
-//routes/tipe_kamar.js
+//backend/routes/tipe_kamar.js
 const express = require('express');
 const slugify = require('slugify');
 const path = require('path');
