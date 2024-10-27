@@ -13,13 +13,11 @@ const app = express();
  * @apiGroup Booking
  * @apiDescription Get detail booking data by id, including the total price for all rooms ordered
  */
-app.get('/:id', 
-  // mustLogin, mustReceptionist,
-   async (req, res) => {
+app.get('/:id', async (req, res) => {
   let params = { id_pemesanan: req.params.id };
 
   try {
-    // Fetch all the booking details for the given reservation ID
+    // Fetch all the booking details for the given reservation ID, regardless of status
     const detailPemesanan = await detail_pemesanan.findAll({
       where: params,
       include: ['kamar'],
@@ -38,5 +36,6 @@ app.get('/:id',
     res.status(500).json({ message: error.message });
   }
 });
+
 
 module.exports = app;

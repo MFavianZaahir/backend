@@ -1,3 +1,4 @@
+//backend/routes/pelanggan.js
 const express = require('express');
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
@@ -27,7 +28,9 @@ const slugOptions = {
  * @apiGroup Customer
  * @apiDescription Get all customer data
  */
-app.get('/', mustLogin, async (req, res) => {
+app.get('/',
+  //  mustLogin,
+    async (req, res) => {
   await pelanggan.findAll()
     .then(result => res.json({ data: result }))
     .catch(error => res.json({ message: error.message }))
@@ -39,7 +42,9 @@ app.get('/', mustLogin, async (req, res) => {
  * @apiGroup Customer
  * @apiDescription Get customer data by slug
  */
-app.get('/:slug', mustLogin, mustAdmin, async (req, res) => {
+app.get('/:slug',
+  //  mustLogin, mustAdmin,
+    async (req, res) => {
   let params = { slug: req.params.slug };
 
   await pelanggan.findOne({ where: params })
@@ -78,32 +83,52 @@ app.post('/', uploadUser.single('foto'), async (req, res) => {
  * @apiGroup Customer
  * @apiDescription Update customer data
  */
-app.put('/', mustLogin, uploadUser.single('foto'), async (req, res) => {
-  if (!req.file) return res.json({ message: "No file uploaded" })
+app.put('/', uploadUser.single('foto'), async (req, res) => {
+  // Log req.body to verify incoming data
+  console.log(req.body);
 
-  let params = { id_pelanggan: req.body.id_pelanggan }
-  let data = {
-    nama: req.body.nama,
-    slug: slugify(req.body.nama, slugOptions),
-    email: req.body.email,
-    password: md5(req.body.password),
+  // Check for id_pelanggan in the request body
+  if (!req.body.id_pelanggan) {
+    return res.status(400).json({ message: "Missing id_pelanggan" });
   }
 
+  let params = { id_pelanggan: req.body.id_pelanggan };
+
+  // Ensure required fields are provided, like nama and password
+  let data = {
+    nama: req.body.nama || '',
+    slug: slugify(req.body.nama || '', { lower: true }),
+    email: req.body.email || '',
+  };
+
+  // Handle password (if provided)
+  if (req.body.password) {
+    data.password = md5(req.body.password);
+  }
+
+  // If there's a new file, handle the file upload and deletion of the old image
   if (req.file) {
     let oldImg = await pelanggan.findOne({ where: params });
-    let oldImgName = oldImg.foto.replace(req.protocol + '://' + req.get('host') + '/usr/', '');
+    if (oldImg) {
+      let oldImgName = oldImg.foto.replace(req.protocol + '://' + req.get('host') + '/usr/', '');
+      let loc = path.join(__dirname, '../public/usr/', oldImgName);
+      fs.unlink(loc, (err) => {
+        if (err) {
+          console.log("Error deleting old image:", err);
+        }
+      });
 
-    let loc = path.join(__dirname, '../public/usr/', oldImgName);
-    fs.unlink(loc, (err) => console.log(err));
-
-    let finalImageURL = req.protocol + '://' + req.get('host') + '/usr/' + req.file.filename;
-    data.foto = finalImageURL;
+      let finalImageURL = req.protocol + '://' + req.get('host') + '/usr/' + req.file.filename;
+      data.foto = finalImageURL;
+    }
   }
 
+  // Update the pelanggan data in the database
   await pelanggan.update(data, { where: params })
     .then(result => res.json({ success: 1, message: "Data has been updated" }))
-    .catch(error => res.json({ message: error.message }))
+    .catch(error => res.json({ message: error.message }));
 });
+
 
 /**
  * @apiRoutes {delete} /hotel/customer/:id
@@ -111,7 +136,9 @@ app.put('/', mustLogin, uploadUser.single('foto'), async (req, res) => {
  * @apiGroup Customer
  * @apiDescription Delete customer data
  */
-app.delete('/:id', mustLogin, mustAdmin, async (req, res) => {
+app.delete('/:id',
+  //  mustLogin, mustAdmin,
+    async (req, res) => {
   let params = { id_pelanggan: req.params.id }
 
   let delImg = await pelanggan.findOne({ where: params });

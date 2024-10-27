@@ -1,3 +1,4 @@
+//backend/routes/user.js
 const express = require("express");
 const md5 = require("md5");
 const jwt = require("jsonwebtoken");
@@ -32,8 +33,7 @@ app.use(cors());
  * @apiGroup User
  * @apiDescription Get all user data
  */
-app.get(
-  "/",
+app.get("/",
   // mustLogin, mustAdmin, mustReceptionist,
   async (req, res) => {
     await user
@@ -56,6 +56,22 @@ app.get("/:slug", mustLogin, mustAdmin, mustReceptionist, async (req, res) => {
     .findOne({ where: params })
     .then((result) => res.json({ success: 1, data: result }))
     .catch((error) => res.json({ success: 0, message: error.message }));
+});
+
+app.get("/auth/role", async (req, res) => {
+  // Assuming you have the user’s ID from the session or token
+  const userId = req.user.id;
+
+  try {
+    const user = await user.findOne({ where: { id: userId } });
+    if (user) {
+      res.json({ role: user.role });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 /**
@@ -136,7 +152,9 @@ app.put("/",
  * @apiGroup User
  * @apiDescription Delete user data
  */
-app.delete("/:id", mustLogin, mustAdmin, async (req, res) => {
+app.delete("/:id",
+  //  mustLogin, mustAdmin,
+    async (req, res) => {
   let params = { id_user: req.params.id };
 
   let delImg = await user.findOne({ where: params });
