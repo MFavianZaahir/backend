@@ -11,6 +11,9 @@ module.exports = {
       nomor_pemesanan: {
         type: Sequelize.STRING
       },
+      total_harga: {
+        type: Sequelize.INTEGER
+      },
       id_pelanggan: {
         type: Sequelize.INTEGER,
         references: {

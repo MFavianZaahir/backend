@@ -25,25 +25,29 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     nomor_pemesanan: DataTypes.STRING,
-    id_pelanggan: DataTypes.INTEGER,  // Foreign key referencing pelanggan
+    id_pelanggan: DataTypes.INTEGER,
     tgl_pemesanan: DataTypes.DATE,
     tgl_check_in: DataTypes.DATE,
     tgl_check_out: DataTypes.DATE,
     nama_tamu: DataTypes.STRING,
     email_pemesanan: DataTypes.STRING,
     jumlah_kamar: DataTypes.INTEGER,
-    id_tipe_kamar: DataTypes.INTEGER,  // Foreign key referencing tipe_kamar
+    id_tipe_kamar: DataTypes.INTEGER,
     status_pemesanan: {
       type: DataTypes.ENUM('baru', 'check_in', 'check_out'),
-      defaultValue: 'baru', // Add default value here
-      allowNull: false
+      defaultValue: 'baru',
+      allowNull: false,
+    },
+    total_harga: {
+      type: DataTypes.INTEGER,
+      allowNull: true, // Make it nullable if you want to calculate it later
     }
-    // id_pelanggan: DataTypes.INTEGER,  // Foreign key referencing user
   }, {
     sequelize,
     modelName: 'pemesanan',
     tableName: 'pemesanan',
   });
+  
 
   return pemesanan;
 };

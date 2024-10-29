@@ -3,6 +3,8 @@ const express = require("express");
 const { mustLogin, mustAdmin } = require("../middleware/auth");
 const kamar = require("../models/index").kamar;
 const detailPemesanan = require("../models/index").detail_pemesanan;
+const { Op } = require('sequelize');
+
 
 const app = express();
 
@@ -43,23 +45,29 @@ app.get("/:id", mustLogin, mustAdmin, async (req, res) => {
  * @apiGroup Room
  * @apiDescription Insert room data
  */
-app.post("/",
-  //  mustLogin, mustAdmin,
-    async (req, res) => {
+app.post("/", async (req, res) => {
   try {
-    let data = {
-      nomor_kamar: req.body.nomor_kamar,
-      id_tipe_kamar: req.body.id_tipe_kamar,
-    };
+    const { nomor_kamar, id_tipe_kamar } = req.body;
 
+    // Check if the room number already exists
+    const existingRoom = await kamar.findOne({ where: { nomor_kamar } });
+    if (existingRoom) {
+      return res.json({
+        success: false,
+        message: "Room number already exists",
+      });
+    }
+
+    let data = { nomor_kamar, id_tipe_kamar };
     await kamar.create(data);
+
     return res.json({
       success: true,
       message: "Success Added New Room",
       data: data,
     });
   } catch (error) {
-    return res.json({ success: false, message: error });
+    return res.json({ success: false, message: error.message });
   }
 });
 
@@ -69,26 +77,34 @@ app.post("/",
  * @apiGroup Room
  * @apiDescription Update room data
  */
-app.put("/:id", 
-  // mustLogin, mustAdmin,
-   async (req, res) => {
-  let params = { id_kamar: req.params.id }; // Get the id from the URL params
-  let data = {
-    nomor_kamar: req.body.nomor_kamar,
-    id_tipe_kamar: req.body.id_tipe_kamar,
-  };
+app.put("/:id", async (req, res) => {
+  try {
+    const { nomor_kamar, id_tipe_kamar } = req.body;
+    const params = { id_kamar: req.params.id };
+    
 
-  await kamar
-    .update(data, { where: params })
-    .then((result) => {
-      if (result[0] === 1) {
-        // Sequelize returns an array, the first element is the affected row count
-        res.json({ success: true, message: "Data has been updated" });
-      } else {
-        res.json({ success: false, message: "No rows updated" });
-      }
-    })
-    .catch((error) => res.json({ success: false, message: error.message }));
+    // Check if the room number already exists for another room
+    const existingRoom = await kamar.findOne({
+      where: { nomor_kamar, id_kamar: { [Op.ne]: params.id_kamar } },
+    });
+    if (existingRoom) {
+      return res.json({
+        success: false,
+        message: "Room number already exists",
+      });
+    }
+
+    let data = { nomor_kamar, id_tipe_kamar };
+    const result = await kamar.update(data, { where: params });
+
+    if (result[0] === 1) {
+      res.json({ success: true, message: "Data has been updated" });
+    } else {
+      res.json({ success: false, message: "No rows updated" });
+    }
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
 });
 
 /**

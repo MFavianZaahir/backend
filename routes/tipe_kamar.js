@@ -52,25 +52,30 @@ app.get('/:slug',
  * @apiGroup TypeRoom
  * @apiDescription Insert type room data
  */
-app.post('/', 
+app.post('/',
   // mustLogin, mustAdmin, 
   uploadTypeRoom.single('foto'), async (req, res) => {
-  if (!req.file) return res.json({ message: "No file uploaded" })
+    if (!req.file) return res.json({ message: "No file uploaded" });
 
-  let finalImageURL = req.protocol + '://' + req.get('host') + '/img/' + req.file.filename;
+    // Validate that harga is greater than 0
+    if (!req.body.harga || req.body.harga <= 0) {
+      return res.status(400).json({ message: "Price must be greater than 0" });
+    }
 
-  let data = {
-    nama_tipe_kamar: req.body.nama_tipe_kamar,
-    slug: slugify(req.body.nama_tipe_kamar, slugOptions),
-    harga: req.body.harga,
-    deskripsi: req.body.deskripsi,
-    foto: finalImageURL
-  }
+    let finalImageURL = req.protocol + '://' + req.get('host') + '/img/' + req.file.filename;
 
-  await tipe_kamar.create(data)
-    .then(result => res.json({ success: 1, message: "Data has been inserted", data: result }))
-    .catch(error => res.json({ message: error.message }))
-});
+    let data = {
+      nama_tipe_kamar: req.body.nama_tipe_kamar,
+      slug: slugify(req.body.nama_tipe_kamar, slugOptions),
+      harga: req.body.harga,
+      deskripsi: req.body.deskripsi,
+      foto: finalImageURL
+    };
+
+    await tipe_kamar.create(data)
+      .then(result => res.json({ success: 1, message: "Data has been inserted", data: result }))
+      .catch(error => res.json({ message: error.message }));
+  });
 
 /**
  * @apiRoutes {put} /hotel/type-room/
@@ -78,53 +83,51 @@ app.post('/',
  * @apiGroup TypeRoom
  * @apiDescription Update type room data
  */
-app.put('/', 
+app.put('/',
   // mustLogin, mustAdmin, 
   uploadTypeRoom.single('foto'), async (req, res) => {
-  // Log request body and file to debug
-  console.log("Request Body:", req.body);
-  console.log("Uploaded File:", req.file);
+    console.log("Request Body:", req.body);
+    console.log("Uploaded File:", req.file);
 
-  // Check if file was uploaded
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  let params = { id_tipe_kamar: req.body.id_tipe_kamar };
-  let data = {
-    nama_tipe_kamar: req.body.nama_tipe_kamar,
-    slug: slugify(req.body.nama_tipe_kamar, slugOptions),
-    harga: req.body.harga,
-    deskripsi: req.body.deskripsi
-  };
-
-  try {
-    // Find the old room type to delete the old image
-    let delImg = await tipe_kamar.findOne({ where: params });
-    if (delImg) {
-      let oldImgName = delImg.foto.replace(req.protocol + '://' + req.get('host') + '/img/', '');
-
-      // Delete the old image from the server
-      let loc = path.join(__dirname, '../public/img/', oldImgName);
-      fs.unlink(loc, (err) => {
-        if (err) console.log("Error deleting old image:", err);
-        else console.log("Old image deleted successfully:", oldImgName);
-      });
-
-      // Save the new image URL in the data
-      let finalImageURL = req.protocol + '://' + req.get('host') + '/img/' + req.file.filename;
-      data.foto = finalImageURL;
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
     }
 
-    // Update the room type in the database
-    await tipe_kamar.update(data, { where: params });
+    // Validate that harga is greater than 0
+    if (!req.body.harga || req.body.harga <= 0) {
+      return res.status(400).json({ message: "Price must be greater than 0" });
+    }
 
-    return res.json({ success: 1, message: "Data has been updated!" });
-  } catch (error) {
-    console.error("Error during update:", error.message);
-    return res.status(500).json({ message: error.message });
-  }
-});
+    let params = { id_tipe_kamar: req.body.id_tipe_kamar };
+    let data = {
+      nama_tipe_kamar: req.body.nama_tipe_kamar,
+      slug: slugify(req.body.nama_tipe_kamar, slugOptions),
+      harga: req.body.harga,
+      deskripsi: req.body.deskripsi
+    };
+
+    try {
+      let delImg = await tipe_kamar.findOne({ where: params });
+      if (delImg) {
+        let oldImgName = delImg.foto.replace(req.protocol + '://' + req.get('host') + '/img/', '');
+        let loc = path.join(__dirname, '../public/img/', oldImgName);
+        fs.unlink(loc, (err) => {
+          if (err) console.log("Error deleting old image:", err);
+          else console.log("Old image deleted successfully:", oldImgName);
+        });
+
+        let finalImageURL = req.protocol + '://' + req.get('host') + '/img/' + req.file.filename;
+        data.foto = finalImageURL;
+      }
+
+      await tipe_kamar.update(data, { where: params });
+      return res.json({ success: 1, message: "Data has been updated!" });
+    } catch (error) {
+      console.error("Error during update:", error.message);
+      return res.status(500).json({ message: error.message });
+    }
+  });
+
 
 
 /**

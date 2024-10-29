@@ -6,44 +6,36 @@ const app = express();
 app.use(cookieParser());
 
 const mustLogin = async (req, res, next) => {
-  //   console.log(req.cookie);
   try {
     const header = req.headers.authorization;
-    if (header == null) {
-      return res.status(400).json({
-        message: "missing token",
-        err: null,
-      });
+    if (!header) {
+      return res.status(400).json({ message: "missing token" });
     }
 
-    let token = header.split(" ")[1];
-    const SECRET_KEY = "bzzzttt";
-
+    const token = header.split(" ")[1];
     let decodedToken;
     try {
-      decodedToken = await jsonwebtoken.verify(token, SECRET_KEY);
+      decodedToken = jsonwebtoken.verify(token, SECRET_KEY);
     } catch (error) {
       if (error instanceof jsonwebtoken.TokenExpiredError) {
-        return res.status(400).json({
-          message: "token expired",
-          err: error,
-        });
+        return res.status(400).json({ message: "token expired", err: error });
       }
-      return res.status(400).json({
-        message: "invalid token",
-        err: error,
-      });
+      return res.status(400).json({ message: "invalid token", err: error });
     }
 
-    req.userData = decodedToken;
+    // Store role in req.userData
+    req.userData = {
+      email: decodedToken.email,
+      id_pelanggan: decodedToken.id_pelanggan,
+      role: decodedToken.role
+    };
     next();
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({
-      message: error,
-    });
+    console.error(error);
+    return res.status(400).json({ message: "Authentication failed" });
   }
 };
+
 
 // Middleware to ensure user is admin
 const mustAdmin = (req, res, next) => {
@@ -78,9 +70,6 @@ const auth = (req, res, next) => {
 
   jwt.verify(token, SECRET_KEY, jwtHeader, (err, usr) => {
     if (err) return res.status(401).json({ message: "Invalid Token" });
-
-    // req.user = usr;
-    // console.log(req.user);
     next();
   });
 };

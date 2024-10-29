@@ -131,6 +131,53 @@
 						"header": []
 					},
 					"response": []
+				},
+				{
+					"name": "editUser",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "editUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama_user",
+									"value": "Atmin",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "atmin@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/ACER/Pictures/48c9522aaa31a27582216bec737e92ce.gif"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -182,7 +229,7 @@
 					"response": []
 				},
 				{
-					"name": "getAllKamar",
+					"name": "getAllTipeKamar",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -688,7 +735,7 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "thosewhocame@mail.com",
+									"value": "ogyakusan@mail.com",
 									"type": "text"
 								},
 								{
@@ -708,6 +755,45 @@
 							"path": [
 								"customer",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePelanggan",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nama",
+									"value": "Pelanggan yang Terhomat",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "customer@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/ACER/Pictures/artworks-CWfcSCJ0sX5zrGoZ-M77lRQ-t500x500.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/customer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"customer"
 							]
 						}
 					},
